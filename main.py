@@ -12,12 +12,12 @@ with open("config.yaml", 'r') as ymlfile:
 def handle_request():
     data = request.form
     try:
-        conn = psycopg2.connect(dbname="contact", user="postgres", password=cfg.pwd, port="7571")
+        conn = psycopg2.connect(dbname="contact", user="postgres", password=cfg['dbpwd'], host="localhost")
     except:
         print("I am unable to connect to the database")
 
     cur = conn.cursor()
-    cur.execute('INSERT', (request.form['name'], request.form['email'], request.form['message']))
+    cur.execute("INSERT INTO persons.persons (name, email, message) VALUES  (%s, %s, %s)", (request.form['name'], request.form['email'], request.form['message']))
     conn.commit()
     print(data)
     cur.close()
